@@ -10,7 +10,16 @@ terraform {
       version = "~> 3.5"
     }
   }
+
+  backend "s3" {
+    bucket       = "terraformstate234223214"
+    key          = "terraform.tfstate"
+    region       = "eu-central-1"
+    encrypt      = true
+    use_lockfile = true
+  }
 }
+
 
 provider "hcloud" {
   token = var.hcloud_token
