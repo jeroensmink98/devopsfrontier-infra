@@ -1,7 +1,16 @@
 variable "hcloud_token" {
-  sensitive = true
-}
-variable "state_key" {
   type        = string
-  description = "The key to use for the state file"
+  description = "The token for the Hetzner Cloud account"
+  sensitive   = true
+}
+
+variable "cloudflare_api_token" {
+  type        = string
+  description = "The API token for the Cloudflare account"
+  sensitive   = true
+}
+
+variable "cloudflare_zone_id" {
+  type        = string
+  description = "The ID of the Cloudflare zone to manage"
 }
