@@ -9,6 +9,10 @@ terraform {
       source  = "hashicorp/http"
       version = "~> 3.5"
     }
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.4"
+    }
   }
 
   backend "s3" {

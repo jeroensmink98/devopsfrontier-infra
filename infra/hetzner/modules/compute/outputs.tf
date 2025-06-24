@@ -9,3 +9,7 @@ output "server_name" {
 output "server_ip" {
   value = hcloud_server.main.ipv4_address
 }
+
+output "floating_server_ip" {
+  value = hcloud_floating_ip.main.ip_address
+}

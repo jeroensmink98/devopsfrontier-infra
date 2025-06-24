@@ -23,7 +23,7 @@ variable "ssh_key" {
   description = "The ssh key to deploy the server with"
 }
 
-variable "current_ip" {
-  description = "Current public IP address for SSH access"
-  type        = string
+variable "allowed_ssh_ips" {
+  description = "List of IP addresses allowed for SSH access"
+  type        = list(string)
 }

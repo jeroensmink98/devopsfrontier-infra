@@ -57,24 +57,36 @@ resource "hcloud_firewall" "main" {
   name = "main"
 
   rule {
-    direction  = "in"
-    port       = "22"
-    protocol   = "tcp"
-    source_ips = ["${var.current_ip}/32"]
+    # Allow SSH access from trusted IPs
+    description = "SSH access from trusted IPs"
+    direction   = "in"
+    port        = "22"
+    protocol    = "tcp"
+    source_ips  = var.allowed_ssh_ips
   }
 
   rule {
-    direction  = "in"
-    port       = "80"
-    protocol   = "tcp"
-    source_ips = ["0.0.0.0/0", "::/0"]
+    description = "HTTP 80 access from all IPs"
+    direction   = "in"
+    port        = "80"
+    protocol    = "tcp"
+    source_ips  = ["0.0.0.0/0", "::/0"]
   }
 
   rule {
-    direction  = "in"
-    port       = "443"
-    protocol   = "tcp"
-    source_ips = ["0.0.0.0/0", "::/0"]
+    description = "HTTP 8080 access from all IPs"
+    direction   = "in"
+    port        = "8080"
+    protocol    = "tcp"
+    source_ips  = ["0.0.0.0/0", "::/0"]
+  }
+
+  rule {
+    description = "HTTPS access from all IPs"
+    direction   = "in"
+    port        = "443"
+    protocol    = "tcp"
+    source_ips  = ["0.0.0.0/0", "::/0"]
   }
 
   # Allow all outbound traffic
