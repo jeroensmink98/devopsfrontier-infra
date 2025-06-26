@@ -1,7 +1,4 @@
 # Learn our public IPv4 address
-data "http" "current_ip" {
-  url = "https://ipv4.icanhazip.com"
-}
 
 locals {
   datacenter  = "fsn1-dc14"
@@ -18,7 +15,7 @@ locals {
   ]
 
   # Combine trusted IPs with current IP
-  allowed_ssh_ips = concat(local.trusted_ips, ["${chomp(data.http.current_ip.response_body)}/32"])
+  allowed_ssh_ips = local.trusted_ips
 }
 
 # Compute
@@ -40,7 +37,7 @@ module "dns" {
   cloudflare_api_token  = var.cloudflare_api_token
   cloudflare_zone_id    = var.cloudflare_zone_id
   server_ip             = module.compute.server_ip
-  additional_subdomains = ["app"]
+  additional_subdomains = ["app", "n8n"]
 }
 
 # Generate Ansible inventory file

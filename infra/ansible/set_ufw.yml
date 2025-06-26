@@ -1,0 +1,15 @@
+- name: Allow ports 80 and 443 via UFW
+  hosts: main
+  become: yes
+  tasks:
+    - name: Allow HTTP (port 80)
+      ansible.builtin.ufw:
+        rule: allow
+        port: 80
+        proto: tcp
+
+    - name: Allow HTTPS (port 443)
+      ansible.builtin.ufw:
+        rule: allow
+        port: 443
+        proto: tcp
