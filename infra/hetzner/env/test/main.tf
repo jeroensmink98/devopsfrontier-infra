@@ -37,16 +37,6 @@ module "dns" {
   cloudflare_api_token  = var.cloudflare_api_token
   cloudflare_zone_id    = var.cloudflare_zone_id
   server_ip             = module.compute.server_ip
-  additional_subdomains = ["app", "n8n"]
+  additional_subdomains = ["app", "n8n", "portainer"]
 }
 
-# Generate Ansible inventory file
-resource "local_file" "ansible_inventory" {
-  content = templatefile("${path.module}/templates/inventory.tpl", {
-    server_name     = module.compute.server_name
-    server_ip       = module.compute.server_ip
-    server_hostname = module.dns.server_hostname
-  })
-  filename        = "${path.module}/ansible/inventory.ini"
-  file_permission = "0644"
-}
