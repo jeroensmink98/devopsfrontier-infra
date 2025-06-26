@@ -1,0 +1,32 @@
+- name: Create Docker volumes
+  hosts: debian_servers
+  become: yes
+  tasks:
+    - name: Create caddy_data volume
+      docker_volume:
+        name: caddy_data
+        state: present
+      register: caddy_volume_result
+
+    - name: Create n8n_data volume
+      docker_volume:
+        name: n8n_data
+        state: present
+      register: n8n_volume_result
+
+    - name: Display caddy volume information
+      debug:
+        msg: "Caddy volume created: {{ caddy_volume_result }}"
+
+    - name: Display n8n volume information
+      debug:
+        msg: "N8N volume created: {{ n8n_volume_result }}"
+
+    - name: List all docker volumes
+      command: docker volume ls
+      register: volume_list
+      changed_when: false
+
+    - name: Show all volumes
+      debug:
+        msg: "All docker volumes: {{ volume_list.stdout_lines }}"
