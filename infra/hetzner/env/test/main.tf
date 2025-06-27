@@ -10,7 +10,8 @@ locals {
     # Add your static/trusted IPs here
     # "203.0.113.1", # Example static IP
     # "198.51.100.1", # Another example
-    "81.206.181.82/32" # Home IP
+    "81.206.181.82/32", # Home IP
+    "95.97.42.170/32"   # TRES Kantoor
 
   ]
 
