@@ -27,9 +27,34 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
       - ${DATA_FOLDER}/local_files:/files
+
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    expose:
+      - "9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+  wallos:
+    container_name: wallos
+    image: bellamy/wallos:latest
+    expose:
+      - "80"
+    environment:
+      TZ: 'Europe/Berlin'
+    # Volumes store your data between container upgrades
+    volumes:
+      - './db:/var/www/html/db'
+      - './logos:/var/www/html/images/uploads/logos'
+    restart: unless-stopped
       
 volumes:
   caddy_data:
     external: true
   n8n_data:
+    external: true
+  portainer_data:
     external: true
