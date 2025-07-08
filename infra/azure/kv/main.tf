@@ -41,9 +41,28 @@ resource "azuread_service_principal" "main" {
   owners    = [data.azuread_user.main.id]
 }
 
-// Role assignment to grant Key Vault Reader access to the app registration
-resource "azurerm_role_assignment" "kv_reader" {
+// Data source to get the current Terraform service principal
+data "azuread_client_config" "current" {}
+
+// Role assignment to grant Key Vault Secrets Officer access to the Terraform service principal
+resource "azurerm_role_assignment" "terraform_kv_secrets_officer" {
   scope                = azurerm_key_vault.main.id
-  role_definition_name = "Key Vault Reader"
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = data.azuread_client_config.current.object_id
+}
+
+// Role assignment to grant Key Vault Secrets User access to the app registration
+resource "azurerm_role_assignment" "kv_secrets_user" {
+  scope                = azurerm_key_vault.main.id
+  role_definition_name = "Key Vault Secrets User"
   principal_id         = azuread_service_principal.main.object_id
+}
+
+// Test secret for the application
+resource "azurerm_key_vault_secret" "test_secret" {
+  name         = "test-secret"
+  value        = "Hello from Azure Key Vault!"
+  key_vault_id = azurerm_key_vault.main.id
+
+  depends_on = [azurerm_role_assignment.terraform_kv_secrets_officer]
 }
