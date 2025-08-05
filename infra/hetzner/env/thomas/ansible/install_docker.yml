@@ -1,0 +1,66 @@
+- name: Install Docker on Debian
+  hosts: debian_servers
+  become: yes
+  tasks:
+    - name: Fix Ansible PPA GPG key issue
+      block:
+        - name: Add the correct Ansible PPA GPG key
+          apt_key:
+            keyserver: keyserver.ubuntu.com
+            id: 93C4A3FD7BB9C367
+            state: present
+          ignore_errors: yes
+
+        - name: Remove problematic Ansible PPA if key fix fails
+          apt_repository:
+            repo: "ppa:ansible/ansible"
+            state: absent
+          when: ansible_lsb.id == "Ubuntu"
+          ignore_errors: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        state: present
+        update_cache: yes
+        allow_unauthenticated: yes
+
+    - name: Add Docker’s official GPG key
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_lsb.codename }} stable"
+        state: present
+
+    - name: Update apt and install Docker packages
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+        update_cache: yes
+        allow_unauthenticated: yes
+
+    - name: Enable and start Docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Add current user to docker group (optional)
+      user:
+        name: "{{ ansible_user_id }}"
+        groups: docker
+        append: yes
+      when: ansible_user_id != 'root'

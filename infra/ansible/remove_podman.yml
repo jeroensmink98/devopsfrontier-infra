@@ -1,0 +1,9 @@
+- name: Remove Podman on Debian
+  hosts: debian_servers
+  become: yes
+  tasks:
+    - name: Remove Podman
+      apt:
+        name: podman
+        state: absent
+        update_cache: yes

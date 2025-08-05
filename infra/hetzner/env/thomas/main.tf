@@ -1,20 +1,17 @@
 # Learn our public IPv4 address
 
+variable "trusted_ips" {
+  description = "List of trusted IPs for SSH access"
+  type        = list(string)
+}
+
 locals {
   datacenter  = "fsn1-dc14"
   image       = "debian-12"
   server_type = "cx22"
 
   # Define trusted IPs for SSH access
-  trusted_ips = [
-    # Add your static/trusted IPs here
-    # "203.0.113.1", # Example static IP
-    # "198.51.100.1", # Another example
-    "81.206.181.82/32", # Home IP
-    "95.97.42.170/32"   # TRES Kantoor
-
-  ]
-
+  trusted_ips = var.trusted_ips
   # Combine trusted IPs with current IP
   allowed_ssh_ips = local.trusted_ips
 }
@@ -34,10 +31,10 @@ module "compute" {
 
 # DNS
 module "dns" {
-  source                = "../../modules/dns"
-  cloudflare_api_token  = var.cloudflare_api_token
-  cloudflare_zone_id    = var.cloudflare_zone_id
-  server_ip             = module.compute.server_ip
-  additional_subdomains = ["app", "n8n", "portainer"]
+  source               = "../../modules/dns"
+  cloudflare_api_token = var.cloudflare_api_token
+  cloudflare_zone_id   = var.cloudflare_zone_id
+  server_ip            = module.compute.server_ip
+  #   additional_subdomains = ["thomas"]
 }
 

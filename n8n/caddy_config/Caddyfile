@@ -3,3 +3,11 @@ n8n.devopsfrontier.com {
       flush_interval -1
     }
 }
+
+portainer.devopsfrontier.com {
+  reverse_proxy portainer:9000
+}
+
+wallos.devopsfrontier.com {
+  reverse_proxy wallos:80
+}

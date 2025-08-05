@@ -1,0 +1,9 @@
+- name: Install Git on Debian
+  hosts: debian_servers
+  become: yes
+  tasks:
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+        update_cache: yes
