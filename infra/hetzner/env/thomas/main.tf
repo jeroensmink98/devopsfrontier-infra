@@ -1,19 +1,17 @@
 # Learn our public IPv4 address
 
+variable "trusted_ips" {
+  description = "List of trusted IPs for SSH access"
+  type        = list(string)
+}
+
 locals {
   datacenter  = "fsn1-dc14"
   image       = "debian-12"
   server_type = "cx22"
 
   # Define trusted IPs for SSH access
-  trusted_ips = [
-    # Add your static/trusted IPs here
-    "81.206.181.82/32", # Home IP
-    "95.97.42.170/32",  # TRES Kantoor
-    "77.173.30.221",    # Thomas's home IP
-
-  ]
-
+  trusted_ips = var.trusted_ips
   # Combine trusted IPs with current IP
   allowed_ssh_ips = local.trusted_ips
 }
