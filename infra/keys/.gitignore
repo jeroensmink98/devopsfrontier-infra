@@ -1,0 +1,7 @@
+# Generated keys - do not commit to version control
+generated_keys/
+*.pem
+*.pub
+password.txt
+terraform.tfstate*
+.terraform/
